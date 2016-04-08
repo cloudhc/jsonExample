@@ -13,5 +13,11 @@ class Products extends Controller {
     val productCodes = Product.findAll.map(_.ean)
     Ok(Json.toJson(productCodes))
   }
+  
+  def details(ean: Long) = Action {
+    Product.findByEan(ean).map { product =>
+      Ok(Json.toJson(product))
+    }.getOrElse(NotFound)
+  }
 }
 

@@ -1,5 +1,7 @@
 package models
 
+import play.api.libs.json._
+
 /**
   * Created by bast on 2016-04-07.
   */
@@ -30,4 +32,12 @@ object Product {
       throw new IllegalArgumentException("Product not found")
     )
   }
+  
+  implicit object ProductWrites extends Writes[Product] {
+    def writes(p: Product) = Json.obj(
+      "ean" -> Json.toJson(p.ean),
+      "name" -> Json.toJson(p.name),
+      "description" -> Json.toJson(p.description)
+    )
+  }  
 }
