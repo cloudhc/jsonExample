@@ -19,5 +19,18 @@ class Products extends Controller {
       Ok(Json.toJson(product))
     }.getOrElse(NotFound)
   }
+  
+  def save(ean: Long) = Action(parse.json) { request =>
+    val productJson = request.body
+    val product = productJson.as[Product]
+    try {
+      Product.save(product)
+      Ok("Saved")
+    }
+    catch {
+      case e:IllegalArgumentException =>
+        BadRequest("Product not found")
+    }
+  }
 }
 

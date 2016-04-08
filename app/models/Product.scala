@@ -1,6 +1,7 @@
 package models
 
 import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 /**
   * Created by bast on 2016-04-07.
@@ -33,11 +34,17 @@ object Product {
     )
   }
   
+  implicit val productReads: Reads[Product] = (
+    (JsPath \ "ean").read[Long] and
+    (JsPath \ "name").read[String] and
+    (JsPath \ "description").read[String]
+  )(Product.apply _)
+  
   implicit object ProductWrites extends Writes[Product] {
     def writes(p: Product) = Json.obj(
       "ean" -> Json.toJson(p.ean),
       "name" -> Json.toJson(p.name),
       "description" -> Json.toJson(p.description)
     )
-  }  
+  }
 }
